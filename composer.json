@@ -15,6 +15,7 @@
         "symfony/yaml": "6.0.*"
     },
     "require-dev": {
+        "roave/security-advisories": "dev-latest",
         "phpunit/phpunit": "^9.5"
     },
     "config": {
@@ -31,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "SuperUmbrella\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "SuperUmbrella\\Tests\\": "tests/"
         }
     },
     "replace": {
