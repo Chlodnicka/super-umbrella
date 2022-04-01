@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
+RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
+
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
