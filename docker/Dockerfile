@@ -1,4 +1,4 @@
-FROM php:8.0-fpm
+FROM php:8.1-fpm
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
@@ -14,13 +14,16 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
+# DB
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql
+
 RUN apt-get update && apt-get install -y procps && rm -rf /var/lib/apt/lists/*
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # XDEBUG
-RUN pecl install xdebug-3.0.3
+RUN pecl install xdebug-3.1.4
 RUN docker-php-ext-enable xdebug
 
 # Install composer

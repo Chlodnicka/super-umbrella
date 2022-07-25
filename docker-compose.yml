@@ -21,6 +21,42 @@ services:
             - ./docker/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
         networks:
             - super-umbrella
+    db:
+        container_name: su_db
+        image: postgres:13-alpine
+        volumes:
+            - db:/var/lib/postgresql/data/pgdata
+        environment:
+            POSTGRES_USER: umbrella
+            POSTGRES_PASSWORD: super
+            POSTGRES_DB: super-umbrella
+            PGDATA: /var/lib/postgresql/data/pgdata
+        ports:
+            -   target: 5432
+                published: 12001
+                protocol: tcp
+                mode: host
+        networks:
+            - super-umbrella
+
+    rabbitmq:
+        container_name: su_rabbit
+        image: rabbitmq:3.8-management-alpine
+        volumes:
+            - rabbitmq:/var/lib/rabbitmq
+            - .docker/rabbitmq/conf:/etc/rabbitmq/conf.d
+        ports:
+            -   target: 5672
+                published: 12003
+                protocol: tcp
+                mode: host
+        networks:
+            - super-umbrella
+
+
+volumes:
+    db: ~
+    rabbitmq: ~
 
 networks:
     super-umbrella:
