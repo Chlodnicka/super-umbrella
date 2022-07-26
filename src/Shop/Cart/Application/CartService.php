@@ -44,5 +44,4 @@ final class CartService
         $cart = $this->cartRepository->get($userId);
         $cart->buy();
     }
-
 }
