@@ -6,23 +6,26 @@ namespace SuperUmbrella\Shop\Cart\Application;
 
 
 use SuperUmbrella\Shop\Cart\Application\Response\AddProductToCartResponse;
-use SuperUmbrella\Shop\Cart\Domain\AddToCartPolicyHandler2;
+use SuperUmbrella\Shop\Cart\Domain\Product;
 use SuperUmbrella\Shop\Cart\Domain\Cart;
+use SuperUmbrella\Shop\Cart\Domain\Request\AddToCartDto;
 
 final class CartService
 {
 
     public function __construct(
-        private CartRepository $cartRepository,
-        private AddToCartPolicyHandler2 $addToCartPolicyHandler2
+        private readonly CartRepository $cartRepository,
+        private readonly ProductRepository $productRepository,
+        private readonly LoyaltyRepository $loyaltyRepository
     ) {
     }
 
     public function addProduct(int $userId, int $productId, int $quantity = 1): AddProductToCartResponse
     {
+        $productDto = $this->productRepository->get($productId);
         $cart = $this->cartRepository->get($userId);
         $isUserPremium = $this->loyaltyRepository->isUserPremium($userId);
-        $isSuccess = $cart->addProduct($product, $quantity, $isUserPremium);
+        $isSuccess = $cart->add($productDto, $quantity, $isUserPremium);
         $this->cartRepository->save($cart);
         return new AddProductToCartResponse($isSuccess);
     }

@@ -51,4 +51,9 @@ final class ProductDtoMotherObject
             DateTimeImmutable::createFromMutable((new DateTime())->modify('-2 day')));
     }
 
+    public static function anUniqueProduct(int $id = TestConstants::PRODUCT_ID): ProductDto
+    {
+        return new ProductDto($id, ProductType::UNIQUE, true, 0, null, null);
+    }
+
 }

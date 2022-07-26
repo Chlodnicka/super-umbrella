@@ -2,10 +2,8 @@
 
 namespace SuperUmbrella\Tests\Shop\Cart\Domain;
 
-use JetBrains\PhpStorm\ArrayShape;
 use PHPUnit\Framework\TestCase;
 use SuperUmbrella\Shop\Cart\Domain\AddToCartPolicy;
-use SuperUmbrella\Shop\Cart\Domain\AddToCartPolicyHandler2;
 use SuperUmbrella\Shop\Cart\Domain\ProductDto;
 use SuperUmbrella\Tests\Shop\Cart\MotherObjects\ProductDtoMotherObject;
 
@@ -32,40 +30,7 @@ class AddToCartPolicyTest extends TestCase
         self::assertSame($expected, $result);
     }
 
-    /**
-     * @param ProductDto $productDto
-     * @param int $quantity
-     * @param bool $userIsPremium
-     * @param bool $expected
-     * @return void
-     * @dataProvider getTestCases
-     */
-    public function testIfShouldAddToCart2(
-        ProductDto $productDto,
-        int $quantity,
-        bool $userIsPremium,
-        bool $expected
-    ): void {
-        // Given
-        $addToCartPolicy = new AddToCartPolicyHandler2($quantity, $userIsPremium);
-
-        // When
-        $result = $addToCartPolicy->isAvailable($productDto);
-
-        //Then
-        self::assertSame($expected, $result);
-    }
-
-    #[ArrayShape([
-        'standard' => "array",
-        'accessoryAvailable' => "array",
-        'accessoryNotAvailable' => "array",
-        'limitedNotAvailable' => "array",
-        'limitedAvailableWithoutQuantity' => "array",
-        'limitedAvailableOnPresaleNotPremiumUser' => "array",
-        'limitedAvailableOnPresalePremiumUser' => "array",
-        'limitedAvailableAfterPresale' => "array"
-    ])] public function getTestCases(): array
+    public function getTestCases(): array
     {
         return [
             'standard' => [
@@ -115,7 +80,26 @@ class AddToCartPolicyTest extends TestCase
                 'quantity' => 1,
                 'userIsPremium' => false,
                 'expected' => true
+            ],
+            'limitedAvailableOnPresalePremiumUserMoreThanMaxQuantity' => [
+                'product' => ProductDtoMotherObject::anAvailableLimitedProductOnPresale(),
+                'quantity' => 4,
+                'userIsPremium' => false,
+                'expected' => false
+            ],
+            'unique' => [
+                'product' => ProductDtoMotherObject::anUniqueProduct(),
+                'quantity' => 1,
+                'userIsPremium' => false,
+                'expected' => true
+            ],
+            'uniqueMoreThan1Quantity' => [
+                'product' => ProductDtoMotherObject::anUniqueProduct(),
+                'quantity' => 2,
+                'userIsPremium' => false,
+                'expected' => false
             ]
         ];
     }
+
 }

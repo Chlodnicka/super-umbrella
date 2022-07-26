@@ -13,9 +13,9 @@ final class ItemList
         $this->itemList = [];
     }
 
-    public function add(AddProductToCartPolicy $product, int $quantity): void
+    public function add(int $productId, int $quantity): void
     {
-        $this->itemList[$product->getId()] = $quantity;
+        $this->itemList[$productId] = $quantity;
     }
 
     public function get(): array

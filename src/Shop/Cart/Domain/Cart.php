@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SuperUmbrella\Shop\Cart\Domain;
 
+use SuperUmbrella\Shop\Cart\Domain\Command\AddProductToCartCommand;
+
 final class Cart
 {
     private function __construct(private ?int $id, private $userId, private ItemList $itemList)
@@ -15,10 +17,10 @@ final class Cart
         return new self(null, $userId, new ItemList());
     }
 
-    public function addProduct(AddProductToCartPolicy $product, int $quantity, bool $userIsPremium): bool
+    public function add(ProductDto $product, int $quantity, bool $userIsPremium): bool
     {
         if (AddToCartPolicy::canAddToCart($product, $quantity, $userIsPremium)) {
-            $this->itemList->add($product, $quantity);
+            $this->itemList->add($product->getId(), $quantity);
             return true;
         }
         return false;

@@ -9,4 +9,5 @@ enum ProductType
     case STANDARD;
     case ACCESSORY;
     case LIMITED;
+    case UNIQUE;
 }
