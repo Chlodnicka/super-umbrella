@@ -6,9 +6,7 @@ namespace SuperUmbrella\Shop\Cart\Application;
 
 
 use SuperUmbrella\Shop\Cart\Application\Response\AddProductToCartResponse;
-use SuperUmbrella\Shop\Cart\Domain\Product;
 use SuperUmbrella\Shop\Cart\Domain\Cart;
-use SuperUmbrella\Shop\Cart\Domain\Request\AddToCartDto;
 
 final class CartService
 {
@@ -38,7 +36,7 @@ final class CartService
     public function removeProduct(int $userId, int $productId): void
     {
         $cart = $this->cartRepository->get($userId);
-        $cart->removeProduct($productId);
+        $cart->remove($productId);
     }
 
     public function buy(int $userId): void

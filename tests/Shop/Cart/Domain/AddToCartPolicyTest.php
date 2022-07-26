@@ -7,6 +7,9 @@ use SuperUmbrella\Shop\Cart\Domain\AddToCartPolicy;
 use SuperUmbrella\Shop\Cart\Domain\ProductDto;
 use SuperUmbrella\Tests\Shop\Cart\MotherObjects\ProductDtoMotherObject;
 
+/**
+ * @covers \SuperUmbrella\Shop\Cart\Domain\AddToCartPolicy
+ */
 class AddToCartPolicyTest extends TestCase
 {
     /**
@@ -81,10 +84,16 @@ class AddToCartPolicyTest extends TestCase
                 'userIsPremium' => false,
                 'expected' => true
             ],
+            'limitedAvailableOnPresalePremiumUserMaxQuantity' => [
+                'product' => ProductDtoMotherObject::anAvailableLimitedProductOnPresale(),
+                'quantity' => 3,
+                'userIsPremium' => true,
+                'expected' => true
+            ],
             'limitedAvailableOnPresalePremiumUserMoreThanMaxQuantity' => [
                 'product' => ProductDtoMotherObject::anAvailableLimitedProductOnPresale(),
                 'quantity' => 4,
-                'userIsPremium' => false,
+                'userIsPremium' => true,
                 'expected' => false
             ],
             'unique' => [

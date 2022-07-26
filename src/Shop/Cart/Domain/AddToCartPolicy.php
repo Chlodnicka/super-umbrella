@@ -23,7 +23,7 @@ final class AddToCartPolicy
 
         if ($productDto->getType() === ProductType::LIMITED && $productDto->isAvailable() && $productDto->getQuantity() >= $quantity) {
             if (self::isOnPresale($productDto)) {
-                return $userIsPremium && $quantity < self::MAX_QUANTITY_OF_LIMITED_ON_PRESALE;
+                return $userIsPremium && $quantity <= self::MAX_QUANTITY_OF_LIMITED_ON_PRESALE;
             }
             return true;
         }

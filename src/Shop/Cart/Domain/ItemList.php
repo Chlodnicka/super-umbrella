@@ -13,9 +13,40 @@ final class ItemList
         $this->itemList = [];
     }
 
-    public function add(int $productId, int $quantity): void
+    public function add(ProductDto $product, int $quantity, bool $userIsPremium): bool
     {
-        $this->itemList[$productId] = $quantity;
+        if (isset($this->itemList[$product->getId()])) {
+            $quantity = $this->itemList[$product->getId()] + $quantity;
+        }
+
+        if (AddToCartPolicy::canAddToCart($product, $quantity, $userIsPremium)) {
+            $this->itemList[$product->getId()] = $quantity;
+            return true;
+        }
+
+        return false;
+    }
+
+    public function updateQuantity(ProductDto $product, int $quantity, bool $userIsPremium): bool
+    {
+        if (isset($this->itemList[$product->getId()])) {
+            return false;
+        }
+
+        if (AddToCartPolicy::canAddToCart($product, $quantity, $userIsPremium)) {
+            $this->itemList[$product->getId()] = $quantity;
+            return true;
+        }
+        return false;
+    }
+
+    public function remove(int $productId): bool
+    {
+        if (isset($this->itemList[$productId])) {
+            unset($this->itemList[$productId]);
+            return true;
+        }
+        return false;
     }
 
     public function get(): array
