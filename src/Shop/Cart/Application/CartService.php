@@ -23,8 +23,13 @@ final class CartService
         $productDto = $this->productRepository->get($productId);
         $cart = $this->cartRepository->get($userId);
         $isUserPremium = $this->loyaltyRepository->isUserPremium($userId);
+
         $isSuccess = $cart->add($productDto, $quantity, $isUserPremium);
-        $this->cartRepository->save($cart);
+
+        if ($isSuccess) {
+            $this->cartRepository->save($cart);
+        }
+
         return new AddProductToCartResponse($isSuccess);
     }
 

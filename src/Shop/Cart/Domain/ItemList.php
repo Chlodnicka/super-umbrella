@@ -4,16 +4,36 @@ declare(strict_types=1);
 
 namespace SuperUmbrella\Shop\Cart\Domain;
 
+use SuperUmbrella\Shop\Shared\Quantity;
+
 final class ItemList
 {
+    /** @var Item[] */
     private array $itemList;
 
-    public function __construct()
+    private function __construct(array $itemList)
     {
-        $this->itemList = [];
+        $this->itemList = $itemList;
     }
 
-    public function add(ProductDto $product, int $quantity, bool $userIsPremium): bool
+    public static function create(): self
+    {
+        return new self([]);
+    }
+
+    public static function ofPayload(array $payload): self
+    {
+        $itemList = [];
+
+        foreach ($payload as $itemPayload) {
+            $item = Item::ofPayload($itemPayload);
+            $itemList[$item->getProductId()] = $item;
+        }
+
+        return new self($itemList);
+    }
+
+    public function add(ProductDto $product, Quantity $quantity, bool $userIsPremium): bool
     {
         if (isset($this->itemList[$product->getId()])) {
             $quantity = $this->itemList[$product->getId()] + $quantity;
