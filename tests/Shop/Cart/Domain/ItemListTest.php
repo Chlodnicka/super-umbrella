@@ -4,6 +4,7 @@ namespace SuperUmbrella\Tests\Shop\Cart\Domain;
 
 use PHPUnit\Framework\TestCase;
 use SuperUmbrella\Shop\Cart\Domain\ItemList;
+use SuperUmbrella\Shop\Shared\Quantity;
 use SuperUmbrella\Tests\Shop\Cart\MotherObjects\ProductDtoMotherObject;
 use SuperUmbrella\Tests\Shop\Cart\MotherObjects\TestConstants;
 
@@ -15,10 +16,10 @@ class ItemListTest extends TestCase
     public function testShouldAddItemToItemList(): void
     {
         // Given
-        $emptyItemList = new ItemList();
+        $emptyItemList = ItemList::create();
 
         // When
-        $result = $emptyItemList->add(ProductDtoMotherObject::aStandardProduct(), 1, false);
+        $result = $emptyItemList->add(ProductDtoMotherObject::aStandardProduct(), new Quantity(1), false);
 
         //Then
         self::assertTrue($result);
@@ -27,10 +28,10 @@ class ItemListTest extends TestCase
     public function testShouldNotAddNotAvailableItemToItemList(): void
     {
         // Given
-        $emptyItemList = new ItemList();
+        $emptyItemList = ItemList::create();
 
         // When
-        $result = $emptyItemList->add(ProductDtoMotherObject::aNotAvailableAccessoryProduct(), 1, false);
+        $result = $emptyItemList->add(ProductDtoMotherObject::aNotAvailableAccessoryProduct(), new Quantity(1), false);
 
         //Then
         self::assertFalse($result);
@@ -39,11 +40,12 @@ class ItemListTest extends TestCase
     public function testShouldNotAddAnotherItemOfUniqueProductToItemList(): void
     {
         // Given
-        $emptyItemList = new ItemList();
-        $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), 3, true);
+        $emptyItemList = ItemList::create();
+        $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), new Quantity(3), true);
 
         // When
-        $result = $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), 1, true);
+        $result = $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), new Quantity(1),
+            true);
 
         //Then
         self::assertFalse($result);
@@ -52,8 +54,8 @@ class ItemListTest extends TestCase
     public function testShouldRemoveExistingItemFromItemList(): void
     {
         // Given
-        $emptyItemList = new ItemList();
-        $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), 3, true);
+        $emptyItemList = ItemList::create();
+        $emptyItemList->add(ProductDtoMotherObject::anAvailableLimitedProductOnPresale(), new Quantity(3), true);
 
         // When
         $result = $emptyItemList->remove(TestConstants::PRODUCT_ID);

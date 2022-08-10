@@ -2,7 +2,9 @@
 
 namespace SuperUmbrella\Shop\Cart\Application;
 
+use SuperUmbrella\Shop\Shared\UserId;
+
 interface LoyaltyRepository
 {
-    public function isUserPremium(int $userId);
+    public function isUserPremium(UserId $userId);
 }

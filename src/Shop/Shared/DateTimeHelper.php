@@ -20,4 +20,9 @@ final class DateTimeHelper
     {
         return $dateTime->format(self::DEFAULT_FORMAT);
     }
+
+    public static function from(string $dateTime, string $format = self::DEFAULT_FORMAT): DateTimeImmutable
+    {
+        return DateTimeImmutable::createFromFormat($format, $dateTime);
+    }
 }

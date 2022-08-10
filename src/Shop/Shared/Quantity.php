@@ -41,4 +41,19 @@ final class Quantity
     {
         return $this->value === $quantity->value;
     }
+
+    public function lessOrEqual(Quantity $quantity): bool
+    {
+        return $this->value <= $quantity->value;
+    }
+
+    public function greaterOrEquals(Quantity $quantity): bool
+    {
+        return $this->value >= $quantity->value;
+    }
+
+    public function getValue(): int
+    {
+        return $this->value;
+    }
 }

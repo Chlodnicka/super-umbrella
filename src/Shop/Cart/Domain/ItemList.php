@@ -36,18 +36,18 @@ final class ItemList
     public function add(ProductDto $product, Quantity $quantity, bool $userIsPremium): bool
     {
         if (isset($this->itemList[$product->getId()])) {
-            $quantity = $this->itemList[$product->getId()] + $quantity;
+            $quantity = $this->itemList[$product->getId()]->getQuantity()->add($quantity);
         }
 
         if (AddToCartPolicy::canAddToCart($product, $quantity, $userIsPremium)) {
-            $this->itemList[$product->getId()] = $quantity;
+            $this->itemList[$product->getId()] = new Item($product->getId(), $quantity);
             return true;
         }
 
         return false;
     }
 
-    public function updateQuantity(ProductDto $product, int $quantity, bool $userIsPremium): bool
+    public function updateQuantity(ProductDto $product, Quantity $quantity, bool $userIsPremium): bool
     {
         if (isset($this->itemList[$product->getId()])) {
             return false;

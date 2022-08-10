@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SuperUmbrella\Shop\Cart\Domain;
 
 use DateTimeImmutable;
+use SuperUmbrella\Shop\Shared\Quantity;
 
 final class ProductDto
 {
@@ -33,9 +34,9 @@ final class ProductDto
         return $this->isAvailable;
     }
 
-    public function getQuantity(): ?int
+    public function getQuantity(): Quantity
     {
-        return $this->quantity;
+        return new Quantity($this->quantity);
     }
 
     public function getPresaleStartedAt(): ?DateTimeImmutable

@@ -15,7 +15,7 @@ final class Item
     private int $productId;
     private Quantity $quantity;
 
-    private function __construct(int $productId, Quantity $quantity)
+    public function __construct(int $productId, Quantity $quantity)
     {
         $this->productId = $productId;
         $this->quantity = $quantity;

@@ -7,6 +7,8 @@ namespace SuperUmbrella\Shop\Cart\Application;
 
 use SuperUmbrella\Shop\Cart\Application\Response\AddProductToCartResponse;
 use SuperUmbrella\Shop\Cart\Domain\Cart;
+use SuperUmbrella\Shop\Shared\Quantity;
+use SuperUmbrella\Shop\Shared\UserId;
 
 final class CartService
 {
@@ -18,13 +20,13 @@ final class CartService
     ) {
     }
 
-    public function addProduct(int $userId, int $productId, int $quantity = 1): AddProductToCartResponse
+    public function addProduct(UserId $userId, int $productId, int $quantity = 1): AddProductToCartResponse
     {
         $productDto = $this->productRepository->get($productId);
         $cart = $this->cartRepository->get($userId);
         $isUserPremium = $this->loyaltyRepository->isUserPremium($userId);
 
-        $isSuccess = $cart->add($productDto, $quantity, $isUserPremium);
+        $isSuccess = $cart->add($productDto, new Quantity($quantity), $isUserPremium);
 
         if ($isSuccess) {
             $this->cartRepository->save($cart);
@@ -33,18 +35,18 @@ final class CartService
         return new AddProductToCartResponse($isSuccess);
     }
 
-    public function get(int $userId): Cart
+    public function get(UserId $userId): Cart
     {
         return $this->cartRepository->get($userId);
     }
 
-    public function removeProduct(int $userId, int $productId): void
+    public function removeProduct(UserId $userId, int $productId): void
     {
         $cart = $this->cartRepository->get($userId);
         $cart->remove($productId);
     }
 
-    public function buy(int $userId): void
+    public function buy(UserId $userId): void
     {
         $cart = $this->cartRepository->get($userId);
         $cart->buy();

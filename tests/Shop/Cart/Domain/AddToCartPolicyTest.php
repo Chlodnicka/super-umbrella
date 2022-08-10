@@ -5,6 +5,8 @@ namespace SuperUmbrella\Tests\Shop\Cart\Domain;
 use PHPUnit\Framework\TestCase;
 use SuperUmbrella\Shop\Cart\Domain\AddToCartPolicy;
 use SuperUmbrella\Shop\Cart\Domain\ProductDto;
+use SuperUmbrella\Shop\Shared\Exception\QuantityValueCannotBeLessThanZero;
+use SuperUmbrella\Shop\Shared\Quantity;
 use SuperUmbrella\Tests\Shop\Cart\MotherObjects\ProductDtoMotherObject;
 
 /**
@@ -17,6 +19,7 @@ class AddToCartPolicyTest extends TestCase
      * @param int $quantity
      * @param bool $userIsPremium
      * @param bool $expected
+     * @throws QuantityValueCannotBeLessThanZero
      * @return void
      * @dataProvider getTestCases
      */
@@ -27,7 +30,7 @@ class AddToCartPolicyTest extends TestCase
         bool $expected
     ): void {
         // When
-        $result = AddToCartPolicy::canAddToCart($productDto, $quantity, $userIsPremium);
+        $result = AddToCartPolicy::canAddToCart($productDto, new Quantity($quantity), $userIsPremium);
 
         //Then
         self::assertSame($expected, $result);
