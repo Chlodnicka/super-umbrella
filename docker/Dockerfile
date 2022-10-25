@@ -26,6 +26,10 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN pecl install xdebug-3.1.4
 RUN docker-php-ext-enable xdebug
 
+# DSe
+RUN pecl install ds
+RUN docker-php-ext-enable ds
+
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
